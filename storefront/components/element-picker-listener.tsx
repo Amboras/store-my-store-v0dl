@@ -9,9 +9,14 @@ import { useEffect } from 'react';
  * When activated, highlights elements on hover and sends selected element data back.
  */
 export function ElementPickerListener() {
+  // Single useEffect to avoid hook ordering issues
   useEffect(() => {
-    // Send navigation updates to parent on route changes
-    if (window.parent !== window) {
+    const isInIframe = window.parent !== window;
+
+    // Navigation tracking setup
+    let navigationCleanup: (() => void) | null = null;
+
+    if (isInIframe) {
       const sendNavigationUpdate = () => {
         const path = window.location.pathname + window.location.search;
         window.parent.postMessage({
@@ -32,14 +37,13 @@ export function ElementPickerListener() {
       };
       document.addEventListener('click', handleClick);
 
-      return () => {
+      navigationCleanup = () => {
         window.removeEventListener('popstate', sendNavigationUpdate);
         document.removeEventListener('click', handleClick);
       };
     }
-  }, []);
 
-  useEffect(() => {
+    // Element picker state
     let isActive = false;
     let overlay: HTMLDivElement | null = null;
     let tooltip: HTMLDivElement | null = null;
@@ -200,11 +204,15 @@ export function ElementPickerListener() {
 
     window.addEventListener('message', handleMessage);
 
+    // Combined cleanup
     return () => {
       window.removeEventListener('message', handleMessage);
       cleanup();
+      if (navigationCleanup) {
+        navigationCleanup();
+      }
     };
-  }, []);
+  }, []); // Empty deps - setup once on mount
 
   return null;
 }
