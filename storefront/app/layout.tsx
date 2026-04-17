@@ -1,6 +1,6 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Lato, Inter } from 'next/font/google'
+import { Barlow, Barlow_Condensed } from 'next/font/google'
 import { Providers } from './providers'
 import Header from '@/components/layout/header'
 import Footer from '@/components/layout/footer'
@@ -14,14 +14,14 @@ import dynamic from 'next/dynamic'
 
 const CookieConsent = dynamic(() => import('@/components/cookie-consent'))
 
-const heading = Lato({
+const heading = Barlow_Condensed({
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['500', '600', '700'],
   variable: '--font-heading',
   display: 'swap',
 })
 
-const body = Inter({
+const body = Barlow({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   variable: '--font-body',
@@ -30,10 +30,10 @@ const body = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Store — Modern Commerce',
-    template: '%s | Store',
+    default: 'Courtside — Gear for Serious Pickleball Players',
+    template: '%s | Courtside',
   },
-  description: 'Discover curated products crafted with care. A modern ecommerce experience.',
+  description: 'The specialist destination for pickleball players who care about performance. Top paddles, shoes, bags, training tools, and hard-to-find upgrades — all curated by players, for players.',
 }
 
 export default function RootLayout({
